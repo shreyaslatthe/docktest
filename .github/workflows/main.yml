@@ -1,0 +1,21 @@
+name: Push into main branch
+  on:
+    push:
+      branches: [ main ]
+
+  jobs:
+    context:
+      runs-on: ubuntu-latest
+      steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build
+        id: build
+        uses: cloudposse/github-action-docker-build-push@main
+        with:
+          registry: registry.hub.docker.com
+          repository: "${{ github.event.repository.name }}"
+          login: "${{ secrets.DOCKERHUB_USERNAME }}"
+          password: "${{ secrets.DOCKERHUB_PWD }}"
+          platforms: linux/amd64,linux/arm64
